@@ -6,9 +6,11 @@ class CandyArea extends StatelessWidget {
   const CandyArea({
     Key? key,
     required this.game,
+    required this.onCandyRemoved,
   }) : super(key: key);
 
   final Game game;
+  final Function(Candy candy) onCandyRemoved;
 
   @override
   Widget build(BuildContext context) {
@@ -20,8 +22,17 @@ class CandyArea extends StatelessWidget {
               Positioned(
                 top: candy.top,
                 left: candy.left,
-                child: CandyWidget(
-                  candy: candy,
+                child: Draggable(
+                  data: candy.color,
+                  onDragCompleted: () => onCandyRemoved(candy),
+                  onDragStarted: () {
+                    if (game.status == Status.notStarted) game.start();
+                  },
+                  feedback: CandyWidget(candy: candy),
+                  childWhenDragging: Container(),
+                  child: CandyWidget(
+                    candy: candy,
+                  ),
                 ),
               ),
           ],

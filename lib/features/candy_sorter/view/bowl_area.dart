@@ -17,8 +17,15 @@ class BowlArea extends StatelessWidget {
       runAlignment: WrapAlignment.spaceEvenly,
       children: [
         for (var i = 0; i < game.colors.length; i++)
-          Bowl(
-            color: game.colors[i],
+          DragTarget(
+            onWillAccept: (Color? data) {
+              return data == game.colors[i];
+            },
+            builder: ((context, candidateData, rejectedData) {
+              return Bowl(
+                color: game.colors[i],
+              );
+            }),
           )
       ],
     );
